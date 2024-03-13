@@ -2,6 +2,7 @@
 #include <algorithm>
 #include <vector>
 #include <string>
+#include <cctype>
 
 // Kan komma på tentan
 /*
@@ -16,8 +17,12 @@
         });
     
     ***************************************************************************************************
-    - std::for_each     -->     "Skriv ut alla"
+    - std::for_each     -->     "Skriv ut alla", "Öka priset med 10% på alla datorer"
 
+        * Med STL (bättre semantik):
+        std::for_each(colors.begin(), colors.end(), [](std::string c) { std::cout << c << std::endl; });
+
+        * med for loop:
         for (auto c : computers) { 
             std::cout << c.getManufacturer() << " - " << c.getCpu() << std::endl; 
         }
@@ -53,12 +58,8 @@
 int main() {
 
     system("clear");
-    std::cout << std::endl;
-    std::cout << "Tenta" << std::endl;
-    std::cout << std::endl;
 
-
-
+    
 
     return 0;
 }
