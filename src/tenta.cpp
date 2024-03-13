@@ -1,4 +1,7 @@
 #include <iostream>
+#include <algorithm>
+#include <vector>
+#include <string>
 
 // Kan komma på tentan
 /*
