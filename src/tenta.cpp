@@ -1,65 +1,81 @@
 #include <iostream>
-#include <algorithm>
-#include <vector>
 #include <string>
-#include <cctype>
-
-// Kan komma på tentan
-/*
-    ***************************************************************************************************
-    - std::sort         -->     "Sortera alla i prisordning (billigast först)"
-
-        Ascending (billigast först):    '<'
-        Descending (dyrast först):      '>' 
-        
-        std::sort(computers.begin(), computers.end(), [] (auto c1, auto c2) {
-            return c1.getPrice() < c2.getPrice();
-        });
-    
-    ***************************************************************************************************
-    - std::for_each     -->     "Skriv ut alla", "Öka priset med 10% på alla datorer"
-
-        * Med STL (bättre semantik):
-        std::for_each(colors.begin(), colors.end(), [](std::string c) { std::cout << c << std::endl; });
-
-        * med for loop:
-        for (auto c : computers) { 
-            std::cout << c.getManufacturer() << " - " << c.getCpu() << std::endl; 
-        }
-
-    ***************************************************************************************************
-    - std::count_if     -->     "Hur många .. finns det?" "Räkna hur många som har..?"
-
-        int desktopCount = std::count_if(computers.begin(), computers.end(), [](Computer c) {
-            return c.getType() == Desktop && c.getCpu() == "Core i9-11900K";
-        });
-
-    ***************************************************************************************************
-    - std::any_of       -->     "Finns det någon.. som kostar mer än 41 500 kr?"
-
-        bool found = std::any_of(computers.begin(), computers.end(), [] (Computer c){
-            return c.getPrice() > 41500;
-        });
-
-    ***************************************************************************************************
-
-    Kommer ej på tentan men bra att känna till:
-
-    - std::transform    -->     Ändrar värden på elements
-    - std::find_if      -->     C++20 (ranges)
-
-    * Alla algoritmer ovan ska skrivas med lambdas
-    * Skippa const när vi skriver lambdas
-    * Använd auto
-    
-*/
+#include <vector>
+#include <algorithm>
+#include <ctime>
+#include <cstdlib>
 
 
-int main() {
+using namespace std;
 
-    system("clear");
+enum class SensorType
+{
+	Altitude,
+	SpeedInKmh,
+	FuelConsumption
+};
 
-    
+class SensorData
+{
+	float value;
+	SensorType sensorType;
+	time_t time;
+public:
+	SensorType GetSensorType() { return sensorType; }
+	float GetValue() { return value; }
+	void SetValue(float v) { value = v; }
+	time_t GetTime() { return time; }
+	SensorData(SensorType sensorType, float value, time_t time)
+	{
+		this->value = value;
+		this->sensorType = sensorType;
+		this->time = time;
+	}
+};
 
-    return 0;
+
+void FillData(vector<SensorData> &v);
+time_t CreateTime(int year, int month, int day, int hour, int minute, int second);
+int main()
+{
+	vector<SensorData> sensorData;
+	FillData(sensorData);
+
+	//SKRIV DIN KOD HÄR!!!!
+}
+
+void FillData(vector<SensorData>& v)
+{
+	srand(time(NULL));
+
+	time_t tid = CreateTime(2012, 1, 1, 1, 1, 1 );
+	for (int i = 0; i < 100000; i++)
+	{
+		SensorType type = static_cast<SensorType>(rand() % 3);
+		float value = 0.0f;
+		if (type == SensorType::Altitude)
+			value = rand() % 1000;
+		else if (type == SensorType::FuelConsumption)
+			value = rand() * 3.0f;
+		else if (type == SensorType::SpeedInKmh)
+			value = rand() % 110;
+		else
+		{
+			value = 99;
+		}
+		v.push_back(SensorData(type,value,tid));
+		tid = tid + rand() % 10 + 1;
+	}
+}
+
+time_t CreateTime(int year, int month, int day, int hour, int minute, int second)
+{
+	struct tm tid = { 0 };
+	tid.tm_year = year-1900;
+	tid.tm_mon = month - 1;
+	tid.tm_mday = day;
+	tid.tm_hour = hour;
+	tid.tm_min = minute;
+	tid.tm_sec = second;
+	return mktime(&tid);
 }
